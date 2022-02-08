@@ -1,12 +1,12 @@
+use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
 use pyo3::types::PySlice;
-use pyo3::exceptions::PyNotImplementedError;
 use ropey::Rope;
 use std::fs::File;
 use std::io;
 use std::io::{BufReader, BufWriter};
 
-#[pyclass(name="Rope")]
+#[pyclass(name = "Rope")]
 #[derive(Clone, Debug)]
 struct PyRope {
     rope: Rope,
@@ -27,7 +27,7 @@ impl PyRope {
     fn __repr__(&self) -> String {
         format!("{:?}", self.rope)
     }
-    
+
     /// Content of the Rope as a string.
     ///
     /// :return: string
@@ -35,34 +35,36 @@ impl PyRope {
     fn text(&self) -> String {
         self.__str__()
     }
-    
+
     /// Creates a Rope from a string slice.
-    /// 
+    ///
     /// :param s: string
     /// :return: Rope
-    #[pyo3(text_signature="(s,/)")]
+    #[pyo3(text_signature = "(s, /)")]
     #[staticmethod]
     fn from_str(s: &str) -> PyRope {
         PyRope {
             rope: Rope::from_str(s),
         }
     }
-    
+
     /// Creates a Rope from the output of a reader.
-    /// 
+    ///
     /// :param reader: reader
     /// :return: Rope
-    #[pyo3(text_signature="(reader,/)")]
+    #[pyo3(text_signature = "(reader, /)")]
     #[staticmethod]
     fn from_reader(_reader: PyObject) -> PyResult<()> {
-        Err(PyNotImplementedError::new_err("Cannot currently convert Python reader to Rust reader"))
+        Err(PyNotImplementedError::new_err(
+            "Cannot currently convert Python reader to Rust reader",
+        ))
     }
-    
+
     /// Creates a Rope from a file.
-    /// 
+    ///
     /// :param f: filename
     /// :return: Rope
-    #[pyo3(text_signature="(f,/)")]
+    #[pyo3(text_signature = "(f, /)")]
     #[staticmethod]
     fn from_file(f: &str) -> io::Result<Self> {
         Ok(PyRope {
@@ -71,17 +73,19 @@ impl PyRope {
     }
 
     /// Writes to content of the Rope to a writer.
-    /// 
+    ///
     /// :param writer: writer
-    #[pyo3(text_signature="(writer,/)")]
+    #[pyo3(text_signature = "(writer, /)")]
     fn write_to(&self, _writer: PyObject) -> PyResult<()> {
-        Err(PyNotImplementedError::new_err("Cannot currently convert Python writer to Rust writer"))
+        Err(PyNotImplementedError::new_err(
+            "Cannot currently convert Python writer to Rust writer",
+        ))
     }
-    
+
     /// Writes to content of the Rope to a file.
-    /// 
+    ///
     /// :param f: filename
-    #[pyo3(text_signature="(f,/)")]
+    #[pyo3(text_signature = "(f, /)")]
     fn write_to_file(&self, f: &str) -> io::Result<()> {
         self.rope.write_to(BufWriter::new(File::create(f)?))?;
         Ok(())
@@ -116,59 +120,70 @@ impl PyRope {
     }
 
     /// Total size of the Rope’s text buffer space, in bytes.
-    /// 
+    ///
     /// :return: capacity
     fn capacity(&self) -> usize {
         self.rope.capacity()
     }
 
     /// Shrinks the Rope’s capacity to the minimum possible.
-    fn shrink_to_fit(&mut self) -> () {
+    fn shrink_to_fit(&mut self) {
         self.rope.shrink_to_fit()
     }
 
     /// Inserts text at char index char_idx.
-    #[pyo3(text_signature="(char_idx, text,/)")]
-    fn insert(&mut self, char_idx: usize, text: &str) -> () {
+    ///
+    /// :param char_idx: char index
+    /// :param text: text
+    #[pyo3(text_signature = "(char_idx, text, /)")]
+    fn insert(&mut self, char_idx: usize, text: &str) {
         self.rope.insert(char_idx, text)
     }
 
     /// Inserts a single char ch at char index char_idx.
-    #[pyo3(text_signature="(char_idx, ch,/)")]
-    fn insert_char(&mut self, char_idx: usize, ch: char) -> () {
+    ///
+    /// :param char_idx: char index
+    /// :param ch: char
+    #[pyo3(text_signature = "(char_idx, ch, /)")]
+    fn insert_char(&mut self, char_idx: usize, ch: char) {
         self.rope.insert_char(char_idx, ch)
     }
 
     #[inline]
-    fn remove_range(&mut self, char_start: usize, char_end: usize) -> () {
+    fn remove_range(&mut self, char_start: usize, char_end: usize) {
         self.rope.remove(char_start..char_end)
     }
 
     #[inline]
-    fn remove_range_from(&mut self, char_start: usize) -> () {
+    fn remove_range_from(&mut self, char_start: usize) {
         self.rope.remove(char_start..)
     }
 
     #[inline]
-    fn remove_range_to(&mut self, char_end: usize) -> () {
+    fn remove_range_to(&mut self, char_end: usize) {
         self.rope.remove(..char_end)
     }
 
     #[inline]
-    fn remove_range_full(&mut self) -> () {
+    fn remove_range_full(&mut self) {
         self.rope.remove(..)
     }
 
     /// Removes the text in the given char index range.
-    /// 
+    ///
+    /// In the Python slice:
+    ///     - start: int or None, None sets start to 0
+    ///     - stop: int or None, None sets stop to self.len_chars()
+    ///     - step: unused
+    ///
     /// :param char_range: range
+    #[pyo3(text_signature = "(char_range, /)")]
     fn remove(&mut self, char_range: &PySlice) -> PyResult<()> {
         let start = {
             let s = char_range.getattr("start")?;
             if s.is_none() {
                 None
-            }
-            else {
+            } else {
                 Some(s.extract()?)
             }
         };
@@ -176,8 +191,7 @@ impl PyRope {
             let s = char_range.getattr("stop")?;
             if s.is_none() {
                 None
-            }
-            else {
+            } else {
                 Some(s.extract()?)
             }
         };
@@ -185,28 +199,35 @@ impl PyRope {
         if let Some(start) = start {
             if let Some(stop) = stop {
                 self.remove_range(start, stop);
-            }
-            else {
+            } else {
                 self.remove_range_from(start);
             }
-        }
-        else {
-            if let Some(stop) = stop {
-                self.remove_range_to(stop);
-            }
-            else {
-                self.remove_range_full();
-            }
+        } else if let Some(stop) = stop {
+            self.remove_range_to(stop);
+        } else {
+            self.remove_range_full();
         }
         Ok(())
     }
 
+    /// Splits the Rope at char_idx, returning the right part of the split.
+    ///
+    /// :param char_idx: char index
+    #[pyo3(text_signature = "(char_idx, /)")]
     fn split_off(&mut self, char_idx: usize) -> Self {
-        PyRope { rope: self.rope.split_off(char_idx) }
+        PyRope {
+            rope: self.rope.split_off(char_idx),
+        }
     }
 
-    
-    fn append(&mut self, other: Self) -> () {
+    /// Appends a Rope to the end of this one, consuming the other Rope.
+    ///
+    /// :Note:
+    /// In Python, the other Rope is cloned due to PyO3 restrictions.
+    ///
+    /// :param other: other Rope
+    #[pyo3(text_signature = "(other, /)")]
+    fn append(&mut self, other: Self) {
         self.rope.append(other.rope)
     }
 }
