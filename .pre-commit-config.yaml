@@ -9,7 +9,7 @@ repos:
     rev: 21.9b0
     hooks:
     -   id: black
--   repo: https://github.com/jeertmans/byexample
+-   repo: https://github.com/byexample/byexample
     rev: 10.3.2
     hooks:
     -   id: byexample
