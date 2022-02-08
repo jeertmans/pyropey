@@ -48,7 +48,7 @@ let start_idx = text.line_to_char(511)
 let end_idx = text.line_to_char(516)
 print(text.slice(slice(start_idx, end_idx)))  # Not implemented yet
 
-// Write the file back out to disk.
+# Write the file back out to disk.
 text.write_to_file("my_great_book.txt")
 ```
 
