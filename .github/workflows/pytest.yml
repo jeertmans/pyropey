@@ -18,6 +18,7 @@ jobs:
       - name: Build package
         uses: messense/maturin-action@v1
         with:
+          maturin-version: "v0.12.6"
           manylinux: auto
           command: build
           args: --release -o dist
