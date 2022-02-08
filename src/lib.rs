@@ -127,39 +127,39 @@ impl PyRope {
     }
 
     /// Shrinks the Rope’s capacity to the minimum possible.
-    fn shrink_to_fit(&mut self) -> () {
+    fn shrink_to_fit(&mut self) {
         self.rope.shrink_to_fit()
     }
 
     /// Inserts text at char index char_idx.
     #[pyo3(text_signature = "(char_idx, text,/)")]
-    fn insert(&mut self, char_idx: usize, text: &str) -> () {
+    fn insert(&mut self, char_idx: usize, text: &str) {
         self.rope.insert(char_idx, text)
     }
 
     /// Inserts a single char ch at char index char_idx.
     #[pyo3(text_signature = "(char_idx, ch,/)")]
-    fn insert_char(&mut self, char_idx: usize, ch: char) -> () {
+    fn insert_char(&mut self, char_idx: usize, ch: char) {
         self.rope.insert_char(char_idx, ch)
     }
 
     #[inline]
-    fn remove_range(&mut self, char_start: usize, char_end: usize) -> () {
+    fn remove_range(&mut self, char_start: usize, char_end: usize) {
         self.rope.remove(char_start..char_end)
     }
 
     #[inline]
-    fn remove_range_from(&mut self, char_start: usize) -> () {
+    fn remove_range_from(&mut self, char_start: usize) {
         self.rope.remove(char_start..)
     }
 
     #[inline]
-    fn remove_range_to(&mut self, char_end: usize) -> () {
+    fn remove_range_to(&mut self, char_end: usize) {
         self.rope.remove(..char_end)
     }
 
     #[inline]
-    fn remove_range_full(&mut self) -> () {
+    fn remove_range_full(&mut self) {
         self.rope.remove(..)
     }
 
@@ -190,12 +190,10 @@ impl PyRope {
             } else {
                 self.remove_range_from(start);
             }
+        } else if let Some(stop) = stop {
+            self.remove_range_to(stop);
         } else {
-            if let Some(stop) = stop {
-                self.remove_range_to(stop);
-            } else {
-                self.remove_range_full();
-            }
+            self.remove_range_full();
         }
         Ok(())
     }
@@ -206,7 +204,7 @@ impl PyRope {
         }
     }
 
-    fn append(&mut self, other: Self) -> () {
+    fn append(&mut self, other: Self) {
         self.rope.append(other.rope)
     }
 }
