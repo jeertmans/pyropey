@@ -1,12 +1,12 @@
+use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
 use pyo3::types::PySlice;
-use pyo3::exceptions::PyNotImplementedError;
 use ropey::Rope;
 use std::fs::File;
 use std::io;
 use std::io::{BufReader, BufWriter};
 
-#[pyclass(name="Rope")]
+#[pyclass(name = "Rope")]
 #[derive(Clone, Debug)]
 struct PyRope {
     rope: Rope,
@@ -40,7 +40,7 @@ impl PyRope {
     ///
     /// :param s: string
     /// :return: Rope
-    #[pyo3(text_signature="(s,/)")]
+    #[pyo3(text_signature = "(s,/)")]
     #[staticmethod]
     fn from_str(s: &str) -> PyRope {
         PyRope {
@@ -52,17 +52,19 @@ impl PyRope {
     ///
     /// :param reader: reader
     /// :return: Rope
-    #[pyo3(text_signature="(reader,/)")]
+    #[pyo3(text_signature = "(reader,/)")]
     #[staticmethod]
     fn from_reader(_reader: PyObject) -> PyResult<()> {
-        Err(PyNotImplementedError::new_err("Cannot currently convert Python reader to Rust reader"))
+        Err(PyNotImplementedError::new_err(
+            "Cannot currently convert Python reader to Rust reader",
+        ))
     }
 
     /// Creates a Rope from a file.
     ///
     /// :param f: filename
     /// :return: Rope
-    #[pyo3(text_signature="(f,/)")]
+    #[pyo3(text_signature = "(f,/)")]
     #[staticmethod]
     fn from_file(f: &str) -> io::Result<Self> {
         Ok(PyRope {
@@ -73,15 +75,17 @@ impl PyRope {
     /// Writes to content of the Rope to a writer.
     ///
     /// :param writer: writer
-    #[pyo3(text_signature="(writer,/)")]
+    #[pyo3(text_signature = "(writer,/)")]
     fn write_to(&self, _writer: PyObject) -> PyResult<()> {
-        Err(PyNotImplementedError::new_err("Cannot currently convert Python writer to Rust writer"))
+        Err(PyNotImplementedError::new_err(
+            "Cannot currently convert Python writer to Rust writer",
+        ))
     }
 
     /// Writes to content of the Rope to a file.
     ///
     /// :param f: filename
-    #[pyo3(text_signature="(f,/)")]
+    #[pyo3(text_signature = "(f,/)")]
     fn write_to_file(&self, f: &str) -> io::Result<()> {
         self.rope.write_to(BufWriter::new(File::create(f)?))?;
         Ok(())
@@ -128,13 +132,13 @@ impl PyRope {
     }
 
     /// Inserts text at char index char_idx.
-    #[pyo3(text_signature="(char_idx, text,/)")]
+    #[pyo3(text_signature = "(char_idx, text,/)")]
     fn insert(&mut self, char_idx: usize, text: &str) -> () {
         self.rope.insert(char_idx, text)
     }
 
     /// Inserts a single char ch at char index char_idx.
-    #[pyo3(text_signature="(char_idx, ch,/)")]
+    #[pyo3(text_signature = "(char_idx, ch,/)")]
     fn insert_char(&mut self, char_idx: usize, ch: char) -> () {
         self.rope.insert_char(char_idx, ch)
     }
@@ -167,8 +171,7 @@ impl PyRope {
             let s = char_range.getattr("start")?;
             if s.is_none() {
                 None
-            }
-            else {
+            } else {
                 Some(s.extract()?)
             }
         };
@@ -176,8 +179,7 @@ impl PyRope {
             let s = char_range.getattr("stop")?;
             if s.is_none() {
                 None
-            }
-            else {
+            } else {
                 Some(s.extract()?)
             }
         };
@@ -185,16 +187,13 @@ impl PyRope {
         if let Some(start) = start {
             if let Some(stop) = stop {
                 self.remove_range(start, stop);
-            }
-            else {
+            } else {
                 self.remove_range_from(start);
             }
-        }
-        else {
+        } else {
             if let Some(stop) = stop {
                 self.remove_range_to(stop);
-            }
-            else {
+            } else {
                 self.remove_range_full();
             }
         }
@@ -202,9 +201,10 @@ impl PyRope {
     }
 
     fn split_off(&mut self, char_idx: usize) -> Self {
-        PyRope { rope: self.rope.split_off(char_idx) }
+        PyRope {
+            rope: self.rope.split_off(char_idx),
+        }
     }
-
 
     fn append(&mut self, other: Self) -> () {
         self.rope.append(other.rope)
