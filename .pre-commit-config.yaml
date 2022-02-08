@@ -14,3 +14,6 @@ repos:
     hooks:
     -   id: byexample
         args: ["-l", "python"]
+-   hooks:
+    -   id: cargo
+        args: ["fmt"]
