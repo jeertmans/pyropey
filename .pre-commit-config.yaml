@@ -14,9 +14,3 @@ repos:
     hooks:
     -   id: byexample
         args: ["-l", "python"]
--   repo: https://github.com/doublify/pre-commit-rust
-    rev: v1.0
-    hooks:
-    -   id: fmt
-    -   id: clippy
-        args: ["--fix"]
