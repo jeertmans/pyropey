@@ -1,7 +1,7 @@
 use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
 use pyo3::types::PySlice;
-use ropey::Rope;
+use ropey::{Rope, RopeBuilder};
 use std::fs::File;
 use std::io;
 use std::io::{BufReader, BufWriter};
@@ -232,9 +232,45 @@ impl PyRope {
     }
 }
 
+
+#[pyclass(name = "RopeBuilder")]
+#[derive(Clone, Debug)]
+struct PyRopeBuilder {
+    rope_builder: RopeBuilder,
+}
+
+#[pymethods]
+impl PyRopeBuilder {
+    /// Creates a new RopeBuilder, ready for input.
+    #[new]
+    fn new() -> PyRopeBuilder {
+        PyRopeBuilder { rope_builder: RopeBuilder::new() }
+    }
+
+    fn __repr__(&self) -> String {
+        format!("{:?}", self.rope_builder)
+    }
+
+    /// Appends chunk to the end of the in-progress Rope.
+    ///
+    /// :param chunk: chunk
+    #[pyo3(text_signature = "(chunk, /)")]
+    fn append(&mut self, chunk: &str) {
+        self.rope_builder.append(chunk)
+    }
+    
+    /// Finishes the build, and returns the Rope.
+    ///
+    /// :return: Rope
+    fn finish(&mut self) -> PyRope {
+        PyRope { rope: self.rope_builder.clone().finish() }
+    }
+}
+
 /// Ropey module exposed to Python users.
 #[pymodule]
 fn ropey(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyRope>()?;
+    m.add_class::<PyRopeBuilder>()?;
     Ok(())
 }
