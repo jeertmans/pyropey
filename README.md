@@ -46,7 +46,7 @@ text.insert(start_idx, "The flowers are... so... dunno.\n")
 # Print the changes, along with the previous few lines for context.
 let start_idx = text.line_to_char(511)
 let end_idx = text.line_to_char(516)
-prrint(text.slice(slice(start_idx, end_idx)))  # Not implemented yet
+print(text.slice(slice(start_idx, end_idx)))  # Not implemented yet
 
 // Write the file back out to disk.
 text.write_to_file("my_great_book.txt")
@@ -67,7 +67,7 @@ Contributions are more than welcome! Here are a few objectives:
 
 [pypi-version-badge]: https://img.shields.io/pypi/djversions/ropey?label=Ropey
 [pypi-version-url]: https://pypi.org/project/ropey/
-[pypi-python-version-url]: https://img.shields.io/pypi/pyversions/ropey
+[pypi-python-version-badge]: https://img.shields.io/pypi/pyversions/ropey
 [github-ci-img]: https://github.com/jeertmans/pyropey/actions/workflows/CI.yml/badge.svg
 [github-ci]: https://github.com/jeertmans/pyropey/actions?query=workflow%3Aci
 [docs-rtd-url]: https://pyropey.readthedocs.io/en/latest/?badge=latest
