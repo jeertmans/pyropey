@@ -1,7 +1,7 @@
 [package]
 authors = ["Jérome Eertmans <jeertmans@icloud.com>"]
 name = "ropey"
-version = "0.0.1-alpha"
+version = "0.0.2-alpha"
 edition = "2018"
 description = "Python bindings for Rust's Ropey library."
 
