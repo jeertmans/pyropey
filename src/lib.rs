@@ -232,7 +232,6 @@ impl PyRope {
     }
 }
 
-
 #[pyclass(name = "RopeBuilder")]
 #[derive(Clone, Debug)]
 struct PyRopeBuilder {
@@ -244,7 +243,9 @@ impl PyRopeBuilder {
     /// Creates a new RopeBuilder, ready for input.
     #[new]
     fn new() -> PyRopeBuilder {
-        PyRopeBuilder { rope_builder: RopeBuilder::new() }
+        PyRopeBuilder {
+            rope_builder: RopeBuilder::new(),
+        }
     }
 
     fn __repr__(&self) -> String {
@@ -258,12 +259,14 @@ impl PyRopeBuilder {
     fn append(&mut self, chunk: &str) {
         self.rope_builder.append(chunk)
     }
-    
+
     /// Finishes the build, and returns the Rope.
     ///
     /// :return: Rope
     fn finish(&mut self) -> PyRope {
-        PyRope { rope: self.rope_builder.clone().finish() }
+        PyRope {
+            rope: self.rope_builder.clone().finish(),
+        }
     }
 }
 
