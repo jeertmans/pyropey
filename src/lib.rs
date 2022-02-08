@@ -27,7 +27,7 @@ impl PyRope {
     fn __repr__(&self) -> String {
         format!("{:?}", self.rope)
     }
-    
+
     /// Content of the Rope as a string.
     ///
     /// :return: string
@@ -35,9 +35,9 @@ impl PyRope {
     fn text(&self) -> String {
         self.__str__()
     }
-    
+
     /// Creates a Rope from a string slice.
-    /// 
+    ///
     /// :param s: string
     /// :return: Rope
     #[pyo3(text_signature="(s,/)")]
@@ -47,9 +47,9 @@ impl PyRope {
             rope: Rope::from_str(s),
         }
     }
-    
+
     /// Creates a Rope from the output of a reader.
-    /// 
+    ///
     /// :param reader: reader
     /// :return: Rope
     #[pyo3(text_signature="(reader,/)")]
@@ -57,9 +57,9 @@ impl PyRope {
     fn from_reader(_reader: PyObject) -> PyResult<()> {
         Err(PyNotImplementedError::new_err("Cannot currently convert Python reader to Rust reader"))
     }
-    
+
     /// Creates a Rope from a file.
-    /// 
+    ///
     /// :param f: filename
     /// :return: Rope
     #[pyo3(text_signature="(f,/)")]
@@ -71,15 +71,15 @@ impl PyRope {
     }
 
     /// Writes to content of the Rope to a writer.
-    /// 
+    ///
     /// :param writer: writer
     #[pyo3(text_signature="(writer,/)")]
     fn write_to(&self, _writer: PyObject) -> PyResult<()> {
         Err(PyNotImplementedError::new_err("Cannot currently convert Python writer to Rust writer"))
     }
-    
+
     /// Writes to content of the Rope to a file.
-    /// 
+    ///
     /// :param f: filename
     #[pyo3(text_signature="(f,/)")]
     fn write_to_file(&self, f: &str) -> io::Result<()> {
@@ -116,7 +116,7 @@ impl PyRope {
     }
 
     /// Total size of the Rope’s text buffer space, in bytes.
-    /// 
+    ///
     /// :return: capacity
     fn capacity(&self) -> usize {
         self.rope.capacity()
@@ -160,7 +160,7 @@ impl PyRope {
     }
 
     /// Removes the text in the given char index range.
-    /// 
+    ///
     /// :param char_range: range
     fn remove(&mut self, char_range: &PySlice) -> PyResult<()> {
         let start = {
@@ -205,7 +205,7 @@ impl PyRope {
         PyRope { rope: self.rope.split_off(char_idx) }
     }
 
-    
+
     fn append(&mut self, other: Self) -> () {
         self.rope.append(other.rope)
     }
