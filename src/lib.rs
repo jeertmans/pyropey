@@ -219,7 +219,7 @@ impl PyRope {
             rope: self.rope.split_off(char_idx),
         }
     }
-    
+
     /// Appends a Rope to the end of this one, consuming the other Rope.
     ///
     /// :Note:
