@@ -1,0 +1,5 @@
+toml==0.10.2
+Sphinx==4.4.0
+sphinx_rtd_theme==1.0.0
+numpydoc==1.2
+recommonmark==0.7.1
