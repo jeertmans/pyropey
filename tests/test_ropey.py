@@ -7,14 +7,14 @@ TEXTS = [
     "Je parle français",
     "This should be a nice test since the sentence might a longer than the others",
     "This is\na\nmultiline\nstring",
-    ]
+]
 
 LONG_TEXT_FILES = [
     "tests/data/short.txt",
     "tests/data/medium.txt",
     "tests/data/large.txt",
 ]
-        
+
 
 SLICES = [
     slice(None, None),
@@ -120,11 +120,12 @@ class TestRope:
     def test_from_str(self, py, rs, text):
         assert py(text) == rs(text)
 
-    @pytest.mark.parametrize("bench,ref,file,_", _b(py_from_str, rs_from_str, LONG_TEXT_FILES))
+    @pytest.mark.parametrize(
+        "bench,ref,file,_", _b(py_from_str, rs_from_str, LONG_TEXT_FILES)
+    )
     def test_from_str_benchmark(self, bench, ref, file, _, benchmark):
         text = open(file).read()
         assert benchmark(bench, text) == ref(text)
-
 
     @pytest.mark.parametrize("py,rs,text", _p(py_len_chars, rs_len_chars, TEXTS))
     def test_len_chars(self, py, rs, text):
