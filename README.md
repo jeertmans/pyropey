@@ -18,7 +18,7 @@ PyRopey aims to provide the performance and accessible interface of Rope into Py
 pip install ropey
 ```
 
-*Note: PyRopey is currently is pre-release status and major changes are to be expected*.
+*Note: PyRopey is currently in pre-release status and major changes are to be expected*.
 
 ## Example Usage
 
