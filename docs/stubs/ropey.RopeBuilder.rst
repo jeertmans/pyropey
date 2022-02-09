@@ -6,4 +6,3 @@
 .. autoclass:: RopeBuilder
    :members:
    :inherited-members:
-
