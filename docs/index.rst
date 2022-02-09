@@ -6,10 +6,19 @@
 Welcome to PyRopey's documentation!
 ===================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
 
+.. toctree::
+
+   README <README.md>
+
+
+Classes and functions
+---------------------
+.. autosummary::
+   :toctree: stubs
+
+   ropey.Rope
+   ropey.RopeBuilder
 
 
 Indices and tables
