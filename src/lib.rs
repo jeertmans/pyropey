@@ -275,7 +275,7 @@ impl PyRope {
 }
 
 /// An efficient incremental Rope builder.
-/// 
+///
 /// This is used to efficiently build ropes from sequences of text chunks. It is useful for creating ropes from:
 ///     - …large text files, without pre-loading their entire contents into memory (but see from_reader() for a convenience function that does this for casual use-cases).
 ///     - …streaming data sources.

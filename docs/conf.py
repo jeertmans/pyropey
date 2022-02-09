@@ -12,6 +12,7 @@
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath("../.."))
 
 
@@ -45,7 +46,7 @@ extensions = [
 
 source_suffix = [".rst", ".md"]
 
-default_role = 'py:obj'
+default_role = "py:obj"
 numpydoc_class_members_toctree = False
 autosummary_generate = False
 
