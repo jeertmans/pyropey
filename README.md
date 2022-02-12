@@ -65,7 +65,7 @@ Contributions are more than welcome! Here are a few objectives:
 - [ ] Create docs, hosted on ReadTheDocs
 - [ ] Build automated benchmarks to compared `ropey` with builtin alternatives
 
-[pypi-version-badge]: https://img.shields.io/pypi/djversions/ropey?label=Ropey
+[pypi-version-badge]: https://img.shields.io/pypi/v/ropey?label=Ropey
 [pypi-version-url]: https://pypi.org/project/ropey/
 [pypi-python-version-badge]: https://img.shields.io/pypi/pyversions/ropey
 [github-ci-img]: https://github.com/jeertmans/pyropey/actions/workflows/CI.yml/badge.svg
